@@ -1,0 +1,48 @@
+const students = [
+  {
+    id: 1,
+    name: "Amina Hassan",
+    email: "amina@example.com",
+    age: 21,
+    course: "Computer Science",
+    gpa: 3.7,
+    status: "Active",
+  },
+  {
+    id: 2,
+    name: "Daniel Bekele",
+    email: "daniel@example.com",
+    age: 22,
+    course: "Software Engineering",
+    gpa: 3.5,
+    status: "Active",
+  },
+  {
+    id: 3,
+    name: "Sara Mohammed",
+    email: "sara@example.com",
+    age: 20,
+    course: "Information Technology",
+    gpa: 3.9,
+    status: "Active",
+  },
+  {
+    id: 4,
+    name: "Yohannes Tesfaye",
+    email: "yohannes@example.com",
+    age: 23,
+    course: "Computer Science",
+    gpa: 2.8,
+    status: "Inactive",
+  },
+  {
+    id: 5,
+    name: "Meron Alemu",
+    email: "meron@example.com",
+    age: 21,
+    course: "Cybersecurity",
+    gpa: 3.6,
+    status: "Active",
+  },
+];
+export default students;
