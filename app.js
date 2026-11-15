@@ -8,8 +8,8 @@ app.use(express.json());
 
 app.use("/api/students", router);
 
-function errorHandler(req, res, next, err) {
-  res.status(err.statusCode).json({
+function errorHandler(err, req, res, next) {
+  res.status(err.statusCode || 500).json({
     success: false,
     message: err.message,
   });
