@@ -2,6 +2,7 @@ import express from "express";
 import {
   addStudent,
   changeStudent,
+  deleteStudent,
   getAllStudents,
   getStudentById,
   updatePatchStudent,
@@ -23,5 +24,7 @@ router.post("/", checkNewInfo, addStudent);
 router.put("/:id", checkPutInfo, changeStudent);
 
 router.patch("/:id", checkPatchInfo, updatePatchStudent);
+
+router.delete("/:id", deleteStudent);
 
 export default router;

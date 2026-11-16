@@ -1,4 +1,5 @@
 import students from "../data/students.js";
+import CreateError from "../services/creatError.js";
 import {
   creatStudent,
   findStudent,
@@ -72,10 +73,31 @@ function updatePatchStudent(req, res, next) {
   }
 }
 
+function deleteStudent(req, res, next) {
+  try {
+    const studId = Number(req.params.id);
+
+    checkValidId(studId);
+
+    const student = students.findIndex((stud) => stud.id === studId);
+    if (student === -1) {
+      return next(new CreateError("student is not found", 404));
+    }
+    students.splice(student, 1);
+    res.status(200).json({
+      success: true,
+      message: "student deleted successfully",
+    });
+  } catch (err) {
+    next(err);
+  }
+}
+
 export {
   getAllStudents,
   addStudent,
   getStudentById,
   changeStudent,
   updatePatchStudent,
+  deleteStudent,
 };
