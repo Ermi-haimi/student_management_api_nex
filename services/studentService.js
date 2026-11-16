@@ -112,12 +112,34 @@ function checkValidId(id) {
 }
 
 function findStudent(id) {
-  const student = students.find((stud) => stud.id === id);
+  let studIndex = -1;
+
+  const student = students.find((stud, index) => {
+    if (stud.id === id) {
+      studIndex = index;
+      return true;
+    }
+    return false;
+  });
 
   if (!student) {
     throw new CreateError("student not found", 404);
   }
-  return student;
+  return [student, studIndex];
+}
+
+function updateStudent(newInfo, index) {
+  const updates = {
+    name: newInfo.name.trim().toLowerCase(),
+    email: newInfo.email.trim().toLowerCase(),
+    age: Number(newInfo.age),
+    course: newInfo.course.trim().toLowerCase(),
+    gpa: Number(newInfo.gpa),
+    status: newInfo.status.trim(),
+  };
+
+  Object.assign(students[index], updates);
+  return students[index];
 }
 
 export {
@@ -129,4 +151,5 @@ export {
   creatStudent,
   checkValidId,
   findStudent,
+  updateStudent,
 };

@@ -3,6 +3,7 @@ import {
   creatStudent,
   findStudent,
   checkValidId,
+  updateStudent,
 } from "../services/studentService.js";
 
 function getAllStudents(req, res) {
@@ -15,8 +16,8 @@ function getAllStudents(req, res) {
 function getStudentById(req, res, next) {
   try {
     checkValidId(req.params.id);
-    const student = findStudent(Number(req.params.id));
-
+    const studentWithIndex = findStudent(Number(req.params.id));
+    const student = studentWithIndex[0];
     res.status(200).json({
       success: true,
       data: student,
@@ -38,4 +39,17 @@ function addStudent(req, res) {
   }
 }
 
-export { getAllStudents, addStudent, getStudentById };
+function changeStudent(req, res) {
+  try {
+    const studentWithIndex = findStudent(Number(req.params.id));
+    const index = studentWithIndex[1];
+    const student = updateStudent(req.body, index);
+
+    res.status(200).json({
+      success: true,
+      data: student,
+    });
+  } catch (error) {}
+}
+
+export { getAllStudents, addStudent, getStudentById, changeStudent };

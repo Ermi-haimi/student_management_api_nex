@@ -4,6 +4,7 @@ import {
   checkDuplicateEmail,
   checkInvalidFields,
   checkStudentFields,
+  checkValidId,
 } from "./studentService.js";
 
 function checkNewInfo(req, res, next) {
@@ -19,4 +20,18 @@ function checkNewInfo(req, res, next) {
   }
 }
 
-export { checkNewInfo };
+function checkPatchInfo(req, res, next) {
+  try {
+    const newInfo = req.body;
+    checkBodyType(newInfo);
+    checkStudentFields(newInfo);
+    checkInvalidFields(newInfo);
+    checkValidId(req.params.id);
+    checkDuplicateEmail(students, newInfo, Number(req.params.id));
+    next();
+  } catch (err) {
+    next(err);
+  }
+}
+
+export { checkNewInfo, checkPatchInfo };
