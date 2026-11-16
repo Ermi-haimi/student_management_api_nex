@@ -93,6 +93,23 @@ function creatStudent(newStudent) {
   return stud;
 }
 
+function checkValidId(id) {
+  const studId = Number(id);
+
+  if (!Number.isInteger(studId) || studId <= 0) {
+    throw new CreateError("an id must be positive integer number", 400);
+  }
+}
+
+function findStudent(id) {
+  const student = students.find((stud) => stud.id === id);
+
+  if (!student) {
+    throw new CreateError("student not found", 404);
+  }
+  return student;
+}
+
 export {
   checkBodyType,
   checkStudentFields,
@@ -100,4 +117,6 @@ export {
   generateId,
   checkDuplicateEmail,
   creatStudent,
+  checkValidId,
+  findStudent,
 };

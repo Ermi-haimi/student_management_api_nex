@@ -1,5 +1,9 @@
 import students from "../data/students.js";
-import { creatStudent } from "../services/studentService.js";
+import {
+  creatStudent,
+  findStudent,
+  checkValidId,
+} from "../services/studentService.js";
 
 function getAllStudents(req, res) {
   res.status(200).json({
@@ -8,9 +12,11 @@ function getAllStudents(req, res) {
   });
 }
 
-function addStudent(req, res) {
+function getStudentById(req, res, next) {
   try {
-    const student = creatStudent(req.body);
+    checkValidId(req.params.id);
+    const student = findStudent(Number(req.params.id));
+
     res.status(200).json({
       success: true,
       data: student,
@@ -20,4 +26,16 @@ function addStudent(req, res) {
   }
 }
 
-export { getAllStudents, addStudent };
+function addStudent(req, res) {
+  try {
+    const student = creatStudent(req.body);
+    res.status(201).json({
+      success: true,
+      data: student,
+    });
+  } catch (err) {
+    next(err);
+  }
+}
+
+export { getAllStudents, addStudent, getStudentById };
