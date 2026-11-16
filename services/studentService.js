@@ -29,14 +29,24 @@ function checkStudentFields(newStudent) {
     typeof newStudent.course !== "string" ||
     newStudent.course.trim() === "" ||
     typeof newStudent.status !== "string" ||
-    newStudent.course.trim() === ""
+    newStudent.status.trim() === ""
   ) {
     throw new CreateError(
       "Name, email, course and status must be non-empty strings",
       400,
     );
   } else if (!Number.isFinite(gpa) || (gpa > 4 && gpa < 0)) {
-    throw new CreateError("GPA should be between one and four", 400);
+    throw new CreateError("GPA should be a number between one and four", 400);
+  } else if (!Number.isInteger(age) || age < 16) {
+    throw new CreateError(
+      "age should be a positive number greater than 16",
+      400,
+    );
+  } else if (
+    newStudent.status.trim().toLowerCase() !== "active" &&
+    newStudent.status.trim().toLowerCase() !== "inactive"
+  ) {
+    throw new CreateError("staus musst be either active or inavtive");
   }
   return true;
 }
@@ -84,9 +94,9 @@ function creatStudent(newStudent) {
     id: generateId(students),
     name: newStudent.name.trim(),
     email: newStudent.email.trim().toLowerCase(),
-    age: newStudent.age,
+    age: Number(newStudent.age),
     course: newStudent.course.trim(),
-    gpa: newStudent.gpa,
+    gpa: Number(newStudent.gpa),
     status: newStudent.status,
   };
 
