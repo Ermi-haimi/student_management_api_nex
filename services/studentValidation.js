@@ -1,5 +1,6 @@
 import students from "../data/students.js";
 import {
+  buildPatchUpdates,
   checkBodyType,
   checkDuplicateEmail,
   checkInvalidFields,
@@ -20,7 +21,7 @@ function checkNewInfo(req, res, next) {
   }
 }
 
-function checkPatchInfo(req, res, next) {
+function checkPutInfo(req, res, next) {
   try {
     const newInfo = req.body;
     checkBodyType(newInfo);
@@ -34,4 +35,20 @@ function checkPatchInfo(req, res, next) {
   }
 }
 
-export { checkNewInfo, checkPatchInfo };
+function checkPatchInfo(req, res, next) {
+  try {
+    const newInfo = req.body;
+    checkBodyType(newInfo);
+    checkInvalidFields(newInfo);
+    checkValidId(req.params.id);
+
+    const update = buildPatchUpdates(req.body, students, Number(req.params.id));
+    req.patchedInfo = update;
+
+    next();
+  } catch (err) {
+    next(err);
+  }
+}
+
+export { checkNewInfo, checkPutInfo, checkPatchInfo };

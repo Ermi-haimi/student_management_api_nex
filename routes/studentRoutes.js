@@ -4,8 +4,13 @@ import {
   changeStudent,
   getAllStudents,
   getStudentById,
+  updatePatchStudent,
 } from "../controllers/studentController.js";
-import { checkNewInfo, checkPatchInfo } from "../services/studentValidation.js";
+import {
+  checkNewInfo,
+  checkPatchInfo,
+  checkPutInfo,
+} from "../services/studentValidation.js";
 
 const router = express.Router();
 
@@ -15,6 +20,8 @@ router.get("/:id", getStudentById);
 
 router.post("/", checkNewInfo, addStudent);
 
-router.put("/:id", checkPatchInfo, changeStudent);
+router.put("/:id", checkPutInfo, changeStudent);
+
+router.patch("/:id", checkPatchInfo, updatePatchStudent);
 
 export default router;

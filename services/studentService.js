@@ -35,7 +35,7 @@ function checkStudentFields(newStudent) {
       "Name, email, course and status must be non-empty strings",
       400,
     );
-  } else if (!Number.isFinite(gpa) || (gpa > 4 && gpa < 0)) {
+  } else if (!Number.isFinite(gpa) || gpa > 4 || gpa < 0) {
     throw new CreateError("GPA should be a number between one and four", 400);
   } else if (!Number.isInteger(age) || age < 16) {
     throw new CreateError(
@@ -46,7 +46,7 @@ function checkStudentFields(newStudent) {
     newStudent.status.trim().toLowerCase() !== "active" &&
     newStudent.status.trim().toLowerCase() !== "inactive"
   ) {
-    throw new CreateError("staus musst be either active or inavtive");
+    throw new CreateError("staus musst be either active or inavtive", 400);
   }
   return true;
 }
@@ -142,6 +142,72 @@ function updateStudent(newInfo, index) {
   return students[index];
 }
 
+function buildPatchUpdates(newInfo, students, studId) {
+  checkBodyType(newInfo);
+  if (Object.keys(newInfo).length === 0) {
+    throw new CreateError("patch body cannot be empty", 400);
+  }
+  let updates = {};
+
+  if (Object.hasOwn(newInfo, "name")) {
+    if (typeof newInfo.name !== "string" || newInfo.name.trim() === "") {
+      throw new CreateError("name cannot be empty", 400);
+    }
+    updates.name = newInfo.name.trim();
+  }
+
+  if (Object.hasOwn(newInfo, "email")) {
+    if (typeof newInfo.email !== "string" || newInfo.email.trim() === "") {
+      throw new CreateError("email cannot be empty", 400);
+    }
+
+    checkDuplicateEmail(students, newInfo, studId);
+
+    let newEmail = newInfo.email;
+    newEmail = newEmail.trim().toLowerCase();
+    updates.email = newEmail;
+  }
+
+  if (Object.hasOwn(newInfo, "course")) {
+    if (typeof newInfo.course !== "string" || newInfo.course.trim() === "") {
+      throw new CreateError("course cannot be empty", 400);
+    }
+    updates.course = newInfo.course.trim();
+  }
+
+  if (Object.hasOwn(newInfo, "age")) {
+    const age = Number(newInfo.age);
+    if (!Number.isInteger(age) || age < 16) {
+      throw new CreateError(
+        "a student must be integer of at least 16 years old",
+        400,
+      );
+    }
+    updates.age = age;
+  }
+  if (Object.hasOwn(newInfo, "gpa")) {
+    const gpa = Number(newInfo.gpa);
+    if (!Number.isFinite(gpa) || gpa > 4 || gpa < 0) {
+      throw new CreateError("GPA should be a number between one and four", 400);
+    }
+    updates.gpa = gpa;
+  }
+
+  if (Object.hasOwn(newInfo, "status")) {
+    if (typeof newInfo.status !== "string" || newInfo.status.trim() === "") {
+      throw new CreateError("status cannot be empty", 400);
+    } else if (
+      newInfo.status.trim().toLowerCase() !== "active" &&
+      newInfo.status.trim().toLowerCase() !== "inactive"
+    ) {
+      throw new CreateError("staus musst be either active or inavtive", 400);
+    }
+    updates.status = newInfo.status.trim();
+  }
+
+  return updates;
+}
+
 export {
   checkBodyType,
   checkStudentFields,
@@ -152,4 +218,5 @@ export {
   checkValidId,
   findStudent,
   updateStudent,
+  buildPatchUpdates,
 };
