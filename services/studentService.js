@@ -46,7 +46,7 @@ function checkStudentFields(newStudent) {
     newStudent.status.trim().toLowerCase() !== "active" &&
     newStudent.status.trim().toLowerCase() !== "inactive"
   ) {
-    throw new CreateError("staus musst be either active or inavtive", 400);
+    throw new CreateError("status must be either active or inavtive", 400);
   }
   return true;
 }
@@ -208,6 +208,15 @@ function buildPatchUpdates(newInfo, students, studId) {
   return updates;
 }
 
+function averageGpa(studs) {
+  let totalSum = 0;
+  studs.map((stud) => {
+    totalSum = totalSum + stud.gpa;
+  });
+
+  return totalSum / studs.length;
+}
+
 export {
   checkBodyType,
   checkStudentFields,
@@ -219,4 +228,5 @@ export {
   findStudent,
   updateStudent,
   buildPatchUpdates,
+  averageGpa,
 };

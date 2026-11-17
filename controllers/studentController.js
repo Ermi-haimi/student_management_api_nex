@@ -5,6 +5,7 @@ import {
   findStudent,
   checkValidId,
   updateStudent,
+  averageGpa,
 } from "../services/studentService.js";
 
 function getAllStudents(req, res) {
@@ -107,6 +108,19 @@ function searchStudent(req, res, next) {
   });
 }
 
+function showStat(req, res, next) {
+  const average = averageGpa(students);
+  const totalStudent = students.length;
+
+  res.status(200).json({
+    success: true,
+    data: {
+      studentsCount: totalStudent,
+      averageGpa: average,
+    },
+  });
+}
+
 export {
   getAllStudents,
   addStudent,
@@ -115,4 +129,5 @@ export {
   updatePatchStudent,
   deleteStudent,
   searchStudent,
+  showStat,
 };

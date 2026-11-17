@@ -6,6 +6,7 @@ import {
   getAllStudents,
   getStudentById,
   searchStudent,
+  showStat,
   updatePatchStudent,
 } from "../controllers/studentController.js";
 import {
@@ -20,6 +21,8 @@ const router = express.Router();
 router.get("/", getAllStudents);
 
 router.get("/search", searchValidation, searchStudent);
+
+router.get("/stats", showStat);
 
 router.get("/:id", getStudentById);
 
