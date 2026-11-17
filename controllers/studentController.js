@@ -93,6 +93,20 @@ function deleteStudent(req, res, next) {
   }
 }
 
+function searchStudent(req, res, next) {
+  const key = req.validatedQuery.field;
+  const term = req.validatedQuery.term;
+  const result = students.filter((stud) =>
+    stud[key].toLowerCase().includes(term),
+  );
+
+  res.status(200).json({
+    success: true,
+    count: result.length,
+    data: result,
+  });
+}
+
 export {
   getAllStudents,
   addStudent,
@@ -100,4 +114,5 @@ export {
   changeStudent,
   updatePatchStudent,
   deleteStudent,
+  searchStudent,
 };

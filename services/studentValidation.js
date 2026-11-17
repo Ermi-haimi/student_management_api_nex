@@ -1,4 +1,5 @@
 import students from "../data/students.js";
+import CreateError from "./creatError.js";
 import {
   buildPatchUpdates,
   checkBodyType,
@@ -51,4 +52,41 @@ function checkPatchInfo(req, res, next) {
   }
 }
 
-export { checkNewInfo, checkPutInfo, checkPatchInfo };
+function searchValidation(req, res, next) {
+  const searchTerms = req.query;
+  if (Object.keys(searchTerms).length === 0) {
+    return next(new CreateError("search query must not be empty", 400));
+  }
+
+  if (Object.keys(searchTerms).length > 1) {
+    return next(new CreateError("search term must be only one trem", 400));
+  }
+
+  const allowedSearchTerms = ["name", "email"];
+  const key = Object.keys(searchTerms)[0];
+  const term = searchTerms[key];
+
+  if (!allowedSearchTerms.includes(key)) {
+    return next(
+      new CreateError("search term should be either name or email", 400),
+    );
+  }
+
+  if (Object.hasOwn(searchTerms, key)) {
+    if (
+      typeof searchTerms[key] !== "string" ||
+      searchTerms[key].trim() === ""
+    ) {
+      return next(
+        new CreateError("search term should be non empty string", 400),
+      );
+    }
+    req.validatedQuery = {
+      field: key,
+      term: term,
+    };
+  }
+  next();
+}
+
+export { checkNewInfo, checkPutInfo, checkPatchInfo, searchValidation };

@@ -5,17 +5,21 @@ import {
   deleteStudent,
   getAllStudents,
   getStudentById,
+  searchStudent,
   updatePatchStudent,
 } from "../controllers/studentController.js";
 import {
   checkNewInfo,
   checkPatchInfo,
   checkPutInfo,
+  searchValidation,
 } from "../services/studentValidation.js";
 
 const router = express.Router();
 
 router.get("/", getAllStudents);
+
+router.get("/search", searchValidation, searchStudent);
 
 router.get("/:id", getStudentById);
 
