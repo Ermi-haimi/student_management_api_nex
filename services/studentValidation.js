@@ -89,4 +89,66 @@ function searchValidation(req, res, next) {
   next();
 }
 
-export { checkNewInfo, checkPutInfo, checkPatchInfo, searchValidation };
+function filterValidation(req, res, next) {
+  const filterBody = req.query;
+  const filters = {};
+  const allowedFilters = ["course", "status", "gpa"];
+
+  const result = Object.keys(filterBody).some(
+    (key) => !allowedFilters.includes(key),
+  );
+
+  if (result) {
+    return next(
+      new CreateError(
+        "only course, status and gpa filer terms are allowed",
+        400,
+      ),
+    );
+  }
+
+  if (Object.hasOwn(filterBody, "course")) {
+    let courseName = filterBody.course;
+    if (typeof courseName !== "string" || courseName.trim() === "") {
+      return next(
+        new CreateError("course filtering should be non empty string", 400),
+      );
+    }
+    filters.course = courseName.trim().toLowerCase();
+  }
+  if (Object.hasOwn(filterBody, "status")) {
+    let status = filterBody.status;
+    if (typeof status !== "string" || status.trim() === "") {
+      return next(
+        new CreateError("status filtering should be non empty string", 400),
+      );
+    } else if (
+      status.trim().toLowerCase() !== "active" &&
+      status.trim().toLowerCase() !== "inactive"
+    ) {
+      return next(new CreateError("status must be active or inactive", 400));
+    }
+    filters.status = status.trim().toLowerCase();
+  }
+  if (Object.hasOwn(filterBody, "gpa")) {
+    let gpa = Number(filterBody.gpa);
+    if (!Number.isFinite(gpa) || gpa < 1 || gpa > 4) {
+      return next(
+        new CreateError("gpa filering must be a number between 1 and 4", 400),
+      );
+    }
+    filters.gpa = gpa;
+  }
+
+  req.filterValues = { ...filters };
+
+  next();
+}
+
+export {
+  checkNewInfo,
+  checkPutInfo,
+  checkPatchInfo,
+  searchValidation,
+  filterValidation,
+};

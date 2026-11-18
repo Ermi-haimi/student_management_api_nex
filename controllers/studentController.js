@@ -6,14 +6,8 @@ import {
   checkValidId,
   updateStudent,
   averageGpa,
+  buildFilteredStudents,
 } from "../services/studentService.js";
-
-function getAllStudents(req, res) {
-  res.status(200).json({
-    success: true,
-    data: students,
-  });
-}
 
 function getStudentById(req, res, next) {
   try {
@@ -121,8 +115,16 @@ function showStat(req, res, next) {
   });
 }
 
+function filterStudent(req, res, next) {
+  const result = buildFilteredStudents(req.filterValues);
+  res.status(200).json({
+    success: true,
+    count: result.length,
+    data: result,
+  });
+}
+
 export {
-  getAllStudents,
   addStudent,
   getStudentById,
   changeStudent,
@@ -130,4 +132,5 @@ export {
   deleteStudent,
   searchStudent,
   showStat,
+  filterStudent,
 };

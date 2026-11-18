@@ -3,7 +3,7 @@ import {
   addStudent,
   changeStudent,
   deleteStudent,
-  getAllStudents,
+  filterStudent,
   getStudentById,
   searchStudent,
   showStat,
@@ -13,12 +13,13 @@ import {
   checkNewInfo,
   checkPatchInfo,
   checkPutInfo,
+  filterValidation,
   searchValidation,
 } from "../services/studentValidation.js";
 
 const router = express.Router();
 
-router.get("/", getAllStudents);
+router.get("/", filterValidation, filterStudent);
 
 router.get("/search", searchValidation, searchStudent);
 

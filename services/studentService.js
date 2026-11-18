@@ -217,6 +217,27 @@ function averageGpa(studs) {
   return totalSum / studs.length;
 }
 
+function buildFilteredStudents(filter) {
+  let filtered = students;
+  if (Object.hasOwn(filter, "course")) {
+    filtered = filtered.filter((stud) => {
+      return stud.course.trim().toLowerCase() === filter.course;
+    });
+  }
+  if (Object.hasOwn(filter, "status")) {
+    filtered = filtered.filter((stud) => {
+      return stud.status.trim().toLowerCase() === filter.status;
+    });
+  }
+  if (Object.hasOwn(filter, "gpa")) {
+    filtered = filtered.filter((stud) => {
+      return stud.gpa === filter.gpa;
+    });
+  }
+
+  return filtered;
+}
+
 export {
   checkBodyType,
   checkStudentFields,
@@ -229,4 +250,5 @@ export {
   updateStudent,
   buildPatchUpdates,
   averageGpa,
+  buildFilteredStudents,
 };
